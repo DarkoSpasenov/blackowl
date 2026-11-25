@@ -48,7 +48,7 @@ export default function Header({ lang, t }: { lang: Locale; t: Dictionary }) {
       <a className="skip" href="#main">{t.nav.skip}</a>
       <header className={`hdr ${hidden && !open ? 'is-hidden' : ''} ${solid ? 'is-solid' : ''} ${open ? 'is-open' : ''}`}>
         <TLink href={href(lang, 'home')} className="hdr__logo" aria-label={`${site.name} — ${t.nav.home}`} data-cursor="">
-          <Image src={asset('/brand/logo-placeholder.webp')!} alt="" width={96} height={96} priority />
+          <Image src={asset('/brand/logo.webp')!} alt="" width={96} height={96} priority />
         </TLink>
 
         <nav className="hdr__nav" aria-label={t.nav.primary}>

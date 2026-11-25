@@ -81,7 +81,7 @@ export default function Preloader({ wordmark }: { wordmark: string }) {
       </svg>
       <div className="pre__mark">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="pre__logo" src={asset('/brand/logo-placeholder.webp')!} alt="" width={140} height={140} />
+        <img className="pre__logo" src={asset('/brand/logo.webp')!} alt="" width={140} height={140} />
         <div className="pre__word">
           {wordmark.split('').map((c, i) => (
             <span key={i}>{c === ' ' ? ' ' : c}</span>

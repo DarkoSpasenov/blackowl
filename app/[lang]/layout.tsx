@@ -51,7 +51,7 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
     '@type': 'TattooParlor',
     name: site.name,
     url: `${siteUrl}/${lang}`,
-    image: `${siteUrl}/brand/logo-placeholder.png`,
+    image: `${siteUrl}/brand/logo.png`,
     telephone: site.phone,
     foundingDate: site.founded,
     address: {
