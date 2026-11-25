@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { GalleryItem } from '@/content/gallery'
+import { asset } from '@/lib/asset'
 import { gsap, prefersReducedMotion } from '@/lib/gsap'
 import type { Locale } from '@/lib/i18n'
 import { lockScroll, useLenis } from './SmoothScroll'
@@ -159,10 +160,10 @@ function Thumb({ item, lang, labels, cols }: { item: GalleryItem; lang: Locale; 
       onPointerLeave={() => video.current?.pause()}
     >
       {still && (
-        <Image src={still} alt={item.alt[lang]} fill sizes={`(max-width: 700px) 50vw, ${Math.round(100 / cols)}vw`} onLoad={() => setLoaded(true)} />
+        <Image src={asset(still)!} alt={item.alt[lang]} fill sizes={`(max-width: 700px) 50vw, ${Math.round(100 / cols)}vw`} onLoad={() => setLoaded(true)} />
       )}
       {item.type === 'video' && item.src && (
-        <video ref={video} src={item.src} muted loop playsInline preload="none" onLoadedData={() => setLoaded(true)} aria-hidden="true" />
+        <video ref={video} src={asset(item.src)!} muted loop playsInline preload="none" onLoadedData={() => setLoaded(true)} aria-hidden="true" />
       )}
     </span>
   )
@@ -374,7 +375,7 @@ function Lightbox({
       {/* Preload neighbours */}
       <div className="lb__preload" aria-hidden="true">
         {neighbours.map((it) =>
-          it.type === 'image' && it.src ? <Image key={it.id} src={it.src} alt="" fill sizes="100vw" loading="eager" /> : null,
+          it.type === 'image' && it.src ? <Image key={it.id} src={asset(it.src)!} alt="" fill sizes="100vw" loading="eager" /> : null,
         )}
       </div>
     </div>,
@@ -384,8 +385,8 @@ function Lightbox({
 
 function LbMedia({ item, lang, labels }: { item: GalleryItem; lang: Locale; labels: Labels }) {
   if (item.type === 'video' && item.src)
-    return <video key={item.id} src={item.src} poster={item.poster ?? undefined} controls autoPlay playsInline loop className="lb__video" />
+    return <video key={item.id} src={asset(item.src)!} poster={asset(item.poster) ?? undefined} controls autoPlay playsInline loop className="lb__video" />
   if (item.type === 'image' && item.src)
-    return <Image key={item.id} src={item.src} alt={item.alt[lang]} fill sizes="100vw" quality={88} priority />
+    return <Image key={item.id} src={asset(item.src)!} alt={item.alt[lang]} fill sizes="100vw" quality={88} priority />
   return <Placeholder label={labels.placeholder} brief={`WORK ${item.id}${item.type === 'video' ? ` · ${labels.video}` : ''}`} ratio={`${item.width}×${item.height}`} alt={item.alt[lang]} />
 }

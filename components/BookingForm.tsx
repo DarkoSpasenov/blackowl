@@ -8,6 +8,13 @@ type Ref = { id: string; file: File; url: string }
 type Errors = Partial<Record<'name' | 'phone' | 'email' | 'description' | 'consent' | 'files', string>>
 
 const MAX_FILES = 5
+/**
+ * Form delivery service endpoint (no server of our own), set at build time:
+ * NEXT_PUBLIC_FORM_ENDPOINT=https://formspree.io/f/xxxxxxx  (see README)
+ */
+const ENDPOINT = process.env.NEXT_PUBLIC_FORM_ENDPOINT || ''
+/** Reference-image uploads need a service plan that accepts files. */
+const FILES_ENABLED = process.env.NEXT_PUBLIC_FORM_FILES !== 'false'
 const ACCEPT = ['image/jpeg', 'image/png', 'image/webp']
 
 /** Downscale reference photos in the browser so uploads stay small and fast. */
@@ -72,14 +79,22 @@ export default function BookingForm({ t, lang }: { t: Dictionary; lang: string }
       form.querySelector<HTMLElement>(`[name="${Object.keys(e)[0]}"]`)?.focus()
       return
     }
+    if (!ENDPOINT) {
+      setStatus('error')
+      setMessage(f.errorConfig)
+      return
+    }
     setStatus('sending')
     setMessage('')
     fd.delete('references')
     const files = await Promise.all(refs.map((r) => compress(r.file)))
     files.forEach((file) => fd.append('references', file))
     fd.set('lang', lang)
+    fd.set('_subject', `Ново барање за термин — ${String(fd.get('name'))}`)
+    const email = String(fd.get('email') || '')
+    if (email) fd.set('_replyto', email)
     try {
-      const res = await fetch('/api/booking', { method: 'POST', body: fd })
+      const res = await fetch(ENDPOINT, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
       if (res.ok) {
         setStatus('sent')
         form.reset()
@@ -91,7 +106,7 @@ export default function BookingForm({ t, lang }: { t: Dictionary; lang: string }
         return
       }
       setStatus('error')
-      setMessage(res.status === 503 ? f.errorConfig : res.status === 429 ? f.errorRate : f.errorGeneric)
+      setMessage(res.status === 429 ? f.errorRate : f.errorGeneric)
     } catch {
       setStatus('error')
       setMessage(f.errorGeneric)
@@ -128,7 +143,7 @@ export default function BookingForm({ t, lang }: { t: Dictionary; lang: string }
     <form className="form" ref={formRef} onSubmit={submit} noValidate aria-busy={status === 'sending'}>
       {/* Honeypot (bots fill it, humans never see it) */}
       <div className="hp" aria-hidden="true">
-        <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
+        <label>Company<input name="_gotcha" tabIndex={-1} autoComplete="off" /></label>
       </div>
 
       {field('name', f.name, <input id="f-name" name="name" autoComplete="name" required {...aria('name')} />, { required: true })}
@@ -144,6 +159,7 @@ export default function BookingForm({ t, lang }: { t: Dictionary; lang: string }
       {field('placement', f.placement, <input id="f-placement" name="placement" maxLength={120} placeholder={f.placementHint} />)}
       {field('size', f.size, <input id="f-size" name="size" maxLength={80} placeholder={f.sizeHint} />)}
 
+      {FILES_ENABLED && (
       <div className={`field field--wide ${errors.files ? 'has-error' : ''}`}>
         <span className="field__label" id="f-ref-label">{f.references} <em>· {f.optional}</em></span>
         <label
@@ -179,6 +195,7 @@ export default function BookingForm({ t, lang }: { t: Dictionary; lang: string }
           </ul>
         )}
       </div>
+      )}
 
       <div className={`check field--wide ${errors.consent ? 'has-error' : ''}`}>
         <input type="checkbox" id="f-consent" name="consent" value="yes" {...aria('consent')} />

@@ -1,4 +1,6 @@
 import type { MetadataRoute } from 'next'
+
+export const dynamic = 'force-static'
 import { siteUrl } from '@/content/site'
 import { locales, routes } from '@/lib/i18n'
 

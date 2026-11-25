@@ -52,4 +52,5 @@ export const site = {
   ],
 }
 
+/** Full public URL including any sub-folder, e.g. https://darkospasenov.github.io/blackowl */
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '')

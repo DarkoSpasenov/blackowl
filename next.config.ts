@@ -1,23 +1,20 @@
 import type { NextConfig } from 'next'
 
+/**
+ * Fully static site (no Node.js server needed): `npm run build` writes plain
+ * HTML/CSS/JS to /out, ready for GitHub Pages or any static host.
+ */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 const nextConfig: NextConfig = {
+  output: 'export',
+  basePath,
   images: {
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [480, 640, 828, 1080, 1440, 1920, 2560],
+    // No image server on static hosting: export photos as WebP/AVIF yourself
+    // (see README). Lazy loading and fixed proportions still apply.
+    unoptimized: true,
   },
   poweredByHeader: false,
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-        ],
-      },
-    ]
-  },
 }
 
 export default nextConfig

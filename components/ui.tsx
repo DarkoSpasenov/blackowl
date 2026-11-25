@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import type { MediaItem } from '@/content/media'
+import { asset } from '@/lib/asset'
 import type { Locale } from '@/lib/i18n'
 import Magnetic from './Magnetic'
 import { TLink } from './Transition'
@@ -110,7 +111,7 @@ export function Media({
     <div className={`media ${fill ? 'media--fill' : ''} ${loaded ? 'is-loaded' : ''} ${className}`} style={style}>
       {item.src ? (
         <Image
-          src={item.src}
+          src={asset(item.src)!}
           alt={item.alt[lang]}
           fill
           sizes={sizes}

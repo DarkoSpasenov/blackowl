@@ -1,43 +1,55 @@
 # Black Owl Tattoo Studio — site web
 
-Next.js 16 (App Router) · TypeScript · CSS sur mesure · GSAP + ScrollTrigger · Lenis.
+Next.js 16 (export statique) · TypeScript · CSS sur mesure · GSAP + ScrollTrigger · Lenis.
 Langues : macédonien (`/mk`, par défaut) et anglais (`/en`).
 
-## Lancer en local
+## Site 100 % statique
 
-```bash
-npm install
-cp .env.example .env.local   # puis remplir les valeurs
-npm run dev                  # http://localhost:3000
-```
+Aucun serveur Node.js n'est nécessaire pour l'hébergement : `npm run build`
+produit du HTML/CSS/JS pur dans `out/`, publiable sur GitHub Pages ou n'importe
+quel hébergement statique (Infomaniak, Netlify, OVH…).
 
-Production : `npm run build && npm start`.
+## Publication sur GitHub Pages (automatique)
 
-## Déploiement
-
-**Vercel (recommandé)** : importer le dépôt sur vercel.com, ajouter les variables
-de `.env.example` dans *Settings → Environment Variables*, déployer. Aucune autre configuration.
-
-**Autre hébergeur Node (VPS, Render, Railway, cPanel Node.js…)** : Node 20+,
-`npm ci && npm run build && npm start` (port via `PORT`).
-
-> Le formulaire a besoin d'un serveur : un hébergement purement statique ne suffit pas.
-
-## Formulaire de rendez-vous (vrai envoi, pas de simulation)
-
-`app/api/booking/route.ts` valide la demande côté serveur et l'envoie par e-mail
-avec les images de référence en pièces jointes.
+1. Dépôt → *Settings → Pages* → *Source* : **GitHub Actions**.
+2. Chaque `push` sur `main` lance `.github/workflows/deploy.yml`, qui construit
+   et publie le site sur `https://darkospasenov.github.io/blackowl/`.
+3. Réglages optionnels dans *Settings → Secrets and variables → Actions → Variables* :
 
 | Variable | Rôle |
 |---|---|
-| `BOOKING_TO_EMAIL` | adresse qui reçoit les demandes (plusieurs : séparées par des virgules) |
-| `BOOKING_FROM_EMAIL` | expéditeur (domaine vérifié chez le fournisseur) |
-| `RESEND_API_KEY` | option A : [Resend](https://resend.com) |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | option B : n'importe quel SMTP |
+| `FORM_ENDPOINT` | adresse du service d'envoi du formulaire (voir plus bas) |
+| `FORM_FILES` | `false` pour masquer l'envoi d'images si le plan du service ne les accepte pas |
+| `SITE_URL` / `BASE_PATH` | uniquement avec un nom de domaine personnalisé (`https://blackowltattoo.mk` et vide) |
 
-Tant que rien n'est configuré, le formulaire répond honnêtement « non connecté »
-et invite à appeler. Protections : honeypot anti-bot, limite 5 envois / 10 min / IP,
-5 images max (compressées dans le navigateur, ≤ 4 Mo au total).
+## Formulaire de rendez-vous (vrai envoi, sans serveur)
+
+Le formulaire envoie directement la demande à un service d'e-mails de
+formulaires, par exemple [Formspree](https://formspree.io) :
+
+1. Créer un formulaire sur formspree.io avec l'adresse e-mail du studio.
+2. Copier son adresse (`https://formspree.io/f/xxxxxxx`) dans la variable `FORM_ENDPOINT`.
+3. Relancer le déploiement (onglet *Actions* → *Run workflow*).
+
+Tant que `FORM_ENDPOINT` est vide, le formulaire l'indique honnêtement au visiteur
+et l'invite à appeler. Les images de référence (5 max, compressées dans le
+navigateur) nécessitent un plan du service qui accepte les fichiers ; sinon
+mettre `FORM_FILES=false`. Anti-spam : champ `_gotcha` (honeypot).
+
+## Travailler en local (optionnel)
+
+```bash
+npm install
+cp .env.example .env.local
+npm run dev          # http://localhost:3000/mk
+npm run build        # génère out/
+```
+
+## Images
+
+Sans serveur, les images ne sont pas converties automatiquement : exportez les
+photos en **WebP ou AVIF** (≈ 2000 px de large pour les grandes, 1200 px pour la
+galerie, qualité 80). Le chargement différé et les proportions sont gérés par le site.
 
 ## Remplacer les contenus provisoires
 
@@ -58,14 +70,14 @@ Règle : uniquement les vraies réalisations du studio, jamais d'image généré
 ## Structure
 
 ```
-app/[lang]/            pages (page.tsx, about/, gallery/, contact/), layout, OG image
-app/api/booking/       envoi du formulaire
+app/[lang]/            pages (page.tsx, about/, gallery/, contact/), layout
 components/            Header, Preloader, Transition (voile), PageFx (moteur d'animations),
                        Hero, WorksSlider, Gallery (masonry + lightbox), BookingForm, Cursor…
 content/               données vérifiées + médias
 lib/                   i18n, SEO, GSAP
 styles/globals.css     système de design complet
-proxy.ts               redirection / → /mk ou /en
+public/index.html      redirection / → /mk ou /en
+.github/workflows/     publication GitHub Pages
 ```
 
 ## Animations
