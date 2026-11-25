@@ -27,14 +27,14 @@ export default async function GalleryPage({ params }: PageProps<'/[lang]/gallery
         <div className="ghead__shade" />
         <div className="ghead__brush ghead__brush--1" data-depth="0.6" aria-hidden="true"><Brush variant={0} /></div>
         <div className="ghead__brush ghead__brush--2" data-depth="0.9" aria-hidden="true"><Brush variant={2} /></div>
-        <div className="wrap ghead__content">
+        <div className="wrap ghead__content"><div className="ghead__block">
           <p className="ghead__eyebrow" data-intro="0.15">{t.gallery.eyebrow}</p>
           <h1 className="mask-title ghead__title" data-split="intro">
             <span className="ml"><span className="ml__i">{t.gallery.title}</span></span>
           </h1>
           <span className="ghead__rule" data-intro="0.6" />
           <p className="ghead__lead" data-intro="0.75">{t.gallery.lead}</p>
-        </div>
+        </div></div>
       </section>
 
       <Gallery

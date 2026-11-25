@@ -140,6 +140,15 @@ export function Placeholder({ brief, label, ratio, alt }: { brief: string; label
   )
 }
 
+// Paint flecks thrown off the end of each stroke (x, y, radius) — deterministic.
+const fleck = (seed: number, n: number, x0: number, x1: number): [number, number, number][] =>
+  Array.from({ length: n }, (_, i) => {
+    const r = Math.abs(Math.sin(seed * 97 + i * 12.9898) * 43758.5453) % 1
+    const q = Math.abs(Math.sin(seed * 31 + i * 78.233) * 12543.123) % 1
+    return [x0 + (x1 - x0) * r, 10 + 80 * q, 0.6 + 2.6 * ((r * q * 7) % 1)]
+  })
+const FLECKS = [fleck(1, 26, 430, 560), fleck(2, 22, 0, 120), fleck(3, 24, 440, 560)]
+
 /** Orange dry-brush stroke (pure SVG, no image). */
 export function Brush({ className = '', variant = 0, depth }: { className?: string; variant?: 0 | 1 | 2; depth?: number }) {
   const paths = [
@@ -159,6 +168,11 @@ export function Brush({ className = '', variant = 0, depth }: { className?: stri
         </filter>
       </defs>
       <path d={paths[variant]} fill="currentColor" filter={`url(#dry${variant})`} />
+      <g fill="currentColor" opacity="0.9">
+        {FLECKS[variant].map(([x, y, r], i) => (
+          <ellipse key={i} cx={x} cy={y} rx={r * 1.8} ry={r} />
+        ))}
+      </g>
     </svg>
   )
 }

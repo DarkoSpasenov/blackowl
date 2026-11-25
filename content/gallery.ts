@@ -48,4 +48,4 @@ export const gallery: GalleryItem[] = [
 ]
 
 /** Works shown in the home-page film strip (ids from the list above). */
-export const featured = ['04', '07', '10', '13', '05', '15', '12']
+export const featured = ['04', '01', '10', '07', '13']

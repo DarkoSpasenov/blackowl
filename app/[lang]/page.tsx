@@ -3,7 +3,7 @@ import BookingCta from '@/components/BookingCta'
 import Hero from '@/components/Hero'
 import PageFx from '@/components/PageFx'
 import { Eyebrow, LineLink, MaskTitle, Media } from '@/components/ui'
-import FilmStrip from '@/components/FilmStrip'
+import WorksSlider from '@/components/WorksSlider'
 import { featured, gallery } from '@/content/gallery'
 import { media } from '@/content/media'
 import { type Locale, getDictionary, href, lines } from '@/lib/i18n'
@@ -25,6 +25,14 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
         <svg className="tear" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
           <path d="M0 80V38c60-6 110 8 170 2s90-22 160-18 120 26 190 20 80-28 150-24 110 22 180 16 100-24 170-20 120 22 190 18 90-14 140-10 50 10 90 6v52z" fill="#080808" />
         </svg>
+
+        <section className="works" aria-labelledby="works-title">
+          <h2 className="works__label" id="works-title" data-fade>{t.home.worksEyebrow}</h2>
+          <div className="wrap" data-fade>
+            <WorksSlider items={featured.map((id) => gallery.find((g) => g.id === id)!).filter(Boolean)} lang={lang} labels={{ prev: t.home.prev, next: t.home.next }} />
+          </div>
+          <div className="works__more" data-fade><LineLink href={href(lang, 'gallery')}>{t.home.worksLink}</LineLink></div>
+        </section>
 
         <section className="intro wrap" aria-labelledby="intro-title">
           <div className="intro__text">
@@ -53,19 +61,6 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
           </div>
         </section>
 
-        <section className="works" aria-labelledby="works-title">
-          <div className="wrap works__head">
-            <Eyebrow n="02">{t.home.worksEyebrow}</Eyebrow>
-            <MaskTitle id="works-title" lines={[t.home.worksTitle]} className="works__title" />
-            <div data-fade><LineLink href={href(lang, 'gallery')}>{t.home.worksLink}</LineLink></div>
-          </div>
-          <FilmStrip
-            items={featured.map((id) => gallery.find((g) => g.id === id)!).filter(Boolean)}
-            lang={lang}
-            href={href(lang, 'gallery')}
-            label={t.gallery.view}
-          />
-        </section>
 
         <BookingCta lang={lang} t={t} title={t.home.ctaTitle} body={t.home.ctaBody} />
       </div>

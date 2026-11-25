@@ -1,3 +1,4 @@
+import '@fontsource/oranienbaum/400.css'
 import '@fontsource/cormorant/300.css'
 import '@fontsource/cormorant/400.css'
 import '@fontsource/cormorant/500.css'

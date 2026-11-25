@@ -28,7 +28,7 @@ function useColumns() {
   useEffect(() => {
     const calc = () => {
       const w = window.innerWidth
-      setCols(w < 700 ? 2 : w < 1600 ? 3 : 4)
+      setCols(w < 700 ? 2 : w < 1100 ? 3 : 4)
     }
     calc()
     window.addEventListener('resize', calc)
