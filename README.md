@@ -58,8 +58,8 @@ Tout ce qui est provisoire est marqué **« Привремена фотогра�
 
 | Quoi | Où |
 |---|---|
-| Photos (hero, intérieur, artistes…) | `content/media.ts` — déposer le fichier dans `public/images/`, renseigner `src`, `width`, `height` |
-| Portfolio (une seule galerie) | `content/gallery.ts` — images ou vidéos (`type: 'video'`, `poster`) |
+| Photos hors galerie (hero, studio, en-têtes) | `content/media.ts` — fichiers dans `public/images/`, renseigner `src`, `width`, `height` |
+| Portfolio (une seule galerie, 16 photos) | `content/gallery.ts` + `public/images/gallery/` — images ou vidéos (`type: 'video'`, `poster`) ; `featured` choisit les œuvres du bandeau de l'accueil |
 | Logo | remplacer `public/brand/logo-placeholder.(png|webp)` par le vrai logo (idéalement SVG/PNG haute définition) et `app/icon.png` |
 | Infos studio, horaires, bios des artistes | `content/site.ts` (`hours`, `artists[].name/bio/approach`) |
 | Textes MK / EN | `lib/i18n.ts` |

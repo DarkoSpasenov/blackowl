@@ -3,8 +3,8 @@ import BookingCta from '@/components/BookingCta'
 import Hero from '@/components/Hero'
 import PageFx from '@/components/PageFx'
 import { Eyebrow, LineLink, MaskTitle, Media } from '@/components/ui'
-import WorksSlider from '@/components/WorksSlider'
-import { gallery } from '@/content/gallery'
+import FilmStrip from '@/components/FilmStrip'
+import { featured, gallery } from '@/content/gallery'
 import { media } from '@/content/media'
 import { type Locale, getDictionary, href, lines } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
@@ -44,10 +44,10 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
           </div>
           <div className="intro__visual">
             <div className="intro__main" data-img-reveal>
-              <div data-parallax="0.08"><Media item={media.studioIntro} lang={lang} sizes="(max-width: 820px) 90vw, 40vw" label={t.common.placeholder} /></div>
+              <div data-parallax="0.08"><Media item={media.workA} lang={lang} sizes="(max-width: 820px) 90vw, 40vw" label={t.common.placeholder} /></div>
             </div>
             <div className="intro__detail" data-img-reveal>
-              <div><Media item={media.heroDetail} lang={lang} sizes="(max-width: 820px) 50vw, 20vw" label={t.common.placeholder} /></div>
+              <div><Media item={media.detail} lang={lang} sizes="(max-width: 820px) 50vw, 20vw" label={t.common.placeholder} /></div>
             </div>
             <span className="intro__year" data-parallax="0.35" aria-hidden="true">2020</span>
           </div>
@@ -59,13 +59,12 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
             <MaskTitle id="works-title" lines={[t.home.worksTitle]} className="works__title" />
             <div data-fade><LineLink href={href(lang, 'gallery')}>{t.home.worksLink}</LineLink></div>
           </div>
-          <div className="wrap" data-fade>
-            <WorksSlider
-              items={gallery.slice(0, 5)}
-              lang={lang}
-              labels={{ prev: t.home.prev, next: t.home.next, placeholder: t.common.placeholder, video: t.common.video }}
-            />
-          </div>
+          <FilmStrip
+            items={featured.map((id) => gallery.find((g) => g.id === id)!).filter(Boolean)}
+            lang={lang}
+            href={href(lang, 'gallery')}
+            label={t.gallery.view}
+          />
         </section>
 
         <BookingCta lang={lang} t={t} title={t.home.ctaTitle} body={t.home.ctaBody} />

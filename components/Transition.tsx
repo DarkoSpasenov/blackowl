@@ -47,6 +47,8 @@ export function TransitionProvider({ children, labels }: { children: React.React
         },
       })
       tl.to(label.current, { autoAlpha: 0, y: -20, duration: 0.35, ease: 'power2.in' })
+        // The new page rises into frame as the veil lifts (camera tilt-up).
+        .fromTo('main', { y: 140 }, { y: 0, duration: 1.4, ease: 'expo.out', clearProps: 'transform' }, 0.1)
         .to('.veil__panel', { yPercent: -100, duration: 0.95, ease: 'expo.inOut' }, 0.05)
         .to('.veil__edge', { yPercent: -100, scaleY: 0.4, duration: 0.95, ease: 'expo.inOut' }, 0.02)
     })

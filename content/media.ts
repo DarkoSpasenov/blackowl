@@ -1,13 +1,8 @@
 /**
- * All site photography in one place.
+ * Site photography outside the gallery.
  *
- * HOW TO REPLACE A PLACEHOLDER
- * 1. Put the real photo in /public/images/... (JPG/PNG/WebP/AVIF — Next.js
- *    automatically serves optimised AVIF/WebP versions).
- * 2. Set `src` to its public path (e.g. '/images/hero.jpg') and update
- *    `width`/`height` to the real pixel size so proportions are respected.
- *
- * While `src` is null, a clearly labelled placeholder is rendered instead.
+ * To change a photo: put the file in /public/images/... (WebP or AVIF),
+ * set `src` and the real `width` / `height` in pixels.
  * Never use AI-generated or AI-modified tattoos here.
  */
 export type MediaItem = {
@@ -15,71 +10,53 @@ export type MediaItem = {
   width: number
   height: number
   alt: { mk: string; en: string }
-  /** What the final photo should be (shown on the placeholder). */
+  /** What the photo should be (shown only on a placeholder when src is null). */
   brief: string
+  /** CSS object-position used when the photo fills a frame of another shape. */
+  focus?: string
 }
 
-const m = (
-  width: number,
-  height: number,
-  brief: string,
-  alt: { mk: string; en: string },
-  src: string | null = null,
-): MediaItem => ({ src, width, height, alt, brief })
-
 export const media = {
-  hero: m(2400, 1600, 'HERO · large artistic tattoo photograph, dark, landscape', {
-    mk: 'Тетоважа на Black Owl Tattoo Studio',
-    en: 'Tattoo by Black Owl Tattoo Studio',
-  }),
-  heroDetail: m(1200, 1500, 'HERO DETAIL · close-up of needle / hand at work', {
-    mk: 'Детал од тетовирање',
-    en: 'Tattooing detail',
-  }),
-  studioIntro: m(1400, 1750, 'STUDIO · artist tattooing, low light', {
-    mk: 'Уметник тетовира во студиото',
-    en: 'Artist tattooing in the studio',
-  }),
-  aboutHero: m(2400, 1400, 'ABOUT · wide shot of the studio interior', {
-    mk: 'Ентериер на студиото Black Owl',
-    en: 'Black Owl studio interior',
-  }),
-  interior1: m(1400, 1800, 'INTERIOR · workstation detail', {
-    mk: 'Работно место во студиото',
-    en: 'Studio workstation',
-  }),
-  interior2: m(1800, 1200, 'INTERIOR · waiting area / walls', {
-    mk: 'Простор во студиото',
-    en: 'Studio space',
-  }),
-  interior3: m(1200, 1200, 'INTERIOR · inks, machines, still life', {
-    mk: 'Бои и машини за тетовирање',
-    en: 'Inks and tattoo machines',
-  }),
-  artistGoce: m(1200, 1600, 'ARTIST · portrait of @gocemicev', {
-    mk: 'Уметникот @gocemicev',
-    en: 'Artist @gocemicev',
-  }),
-  artistGoceWork: m(1600, 1100, 'ARTIST · @gocemicev tattooing', {
-    mk: '@gocemicev за време на тетовирање',
-    en: '@gocemicev tattooing',
-  }),
-  artistK: m(1200, 1600, 'ARTIST · portrait of @k_dimitrieva', {
-    mk: 'Уметницата @k_dimitrieva',
-    en: 'Artist @k_dimitrieva',
-  }),
-  artistKWork: m(1600, 1100, 'ARTIST · @k_dimitrieva tattooing', {
-    mk: '@k_dimitrieva за време на тетовирање',
-    en: '@k_dimitrieva tattooing',
-  }),
-  galleryHero: m(1600, 1200, 'GALLERY HEADER · signature piece, dark background', {
-    mk: 'Тетоважа од студиото',
-    en: 'Tattoo from the studio',
-  }),
-  contactHero: m(2000, 1300, 'CONTACT · studio entrance / storefront', {
-    mk: 'Влезот на студиото',
-    en: 'Studio entrance',
-  }),
+  hero: {
+    src: '/images/hero.webp',
+    width: 1302,
+    height: 1724,
+    focus: '50% 22%',
+    brief: 'HERO',
+    alt: { mk: 'Христос со трнов венец — тетоважа од Black Owl Tattoo Studio', en: 'Christ with a crown of thorns — tattoo by Black Owl Tattoo Studio' },
+  },
+  workA: {
+    src: '/images/studio/work-01.webp',
+    width: 707,
+    height: 947,
+    focus: '50% 30%',
+    brief: 'STUDIO',
+    alt: { mk: 'Тетовирање во студиото Black Owl', en: 'Tattooing at the Black Owl studio' },
+  },
+  workB: {
+    src: '/images/studio/work-02.webp',
+    width: 707,
+    height: 930,
+    focus: '50% 35%',
+    brief: 'STUDIO',
+    alt: { mk: 'Уметник при работа во Black Owl', en: 'Artist at work at Black Owl' },
+  },
+  galleryHero: {
+    src: '/images/gallery/10.webp',
+    width: 707,
+    height: 922,
+    focus: '50% 40%',
+    brief: 'GALLERY',
+    alt: { mk: 'Тигар на подлактица — Black Owl Tattoo Studio', en: 'Tiger on the forearm — Black Owl Tattoo Studio' },
+  },
+  detail: {
+    src: '/images/gallery/12.webp',
+    width: 707,
+    height: 763,
+    focus: '50% 50%',
+    brief: 'DETAIL',
+    alt: { mk: 'Око и волк на подлактица — Black Owl Tattoo Studio', en: 'Eye and wolf on the forearm — Black Owl Tattoo Studio' },
+  },
 } satisfies Record<string, MediaItem>
 
 export type MediaKey = keyof typeof media

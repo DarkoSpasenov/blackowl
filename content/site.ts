@@ -37,8 +37,6 @@ export const site = {
       name: null as null | string,
       bio: null as null | { mk: string; en: string },
       approach: null as null | { mk: string; en: string },
-      photo: 'artistGoce' as const,
-      photoWork: 'artistGoceWork' as const,
     },
     {
       handle: '@k_dimitrieva',
@@ -46,8 +44,6 @@ export const site = {
       name: null as null | string,
       bio: null as null | { mk: string; en: string },
       approach: null as null | { mk: string; en: string },
-      photo: 'artistK' as const,
-      photoWork: 'artistKWork' as const,
     },
   ],
 }

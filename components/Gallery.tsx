@@ -89,6 +89,24 @@ export default function Gallery({ items, lang, labels }: { items: GalleryItem[];
     return () => io.disconnect()
   }, [columns])
 
+  // Desktop depth: columns travel at slightly different speeds while scrolling.
+  useEffect(() => {
+    const el = grid.current
+    if (!el) return
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+      const speeds = [0, -70, 30, -45]
+      el.querySelectorAll<HTMLElement>('.masonry__col').forEach((c, i) => {
+        if (!speeds[i]) return
+        gsap.fromTo(c, { y: -speeds[i] / 2 }, {
+          y: speeds[i] / 2, ease: 'none',
+          scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: 1.2 },
+        })
+      })
+    })
+    return () => mm.revert()
+  }, [columns])
+
   const openAt = (i: number, el: HTMLElement | null) => {
     origin.current = el
     setOpen(i)
@@ -160,7 +178,7 @@ function Thumb({ item, lang, labels, cols }: { item: GalleryItem; lang: Locale; 
       onPointerLeave={() => video.current?.pause()}
     >
       {still && (
-        <Image src={asset(still)!} alt={item.alt[lang]} fill sizes={`(max-width: 700px) 50vw, ${Math.round(100 / cols)}vw`} onLoad={() => setLoaded(true)} />
+        <Image src={asset(still)!} alt={item.alt[lang]} fill loading="lazy" sizes={`(max-width: 700px) 50vw, ${Math.round(100 / cols)}vw`} onLoad={() => setLoaded(true)} ref={(img) => { if (img?.complete && img.naturalWidth) setLoaded(true) }} />
       )}
       {item.type === 'video' && item.src && (
         <video ref={video} src={asset(item.src)!} muted loop playsInline preload="none" onLoadedData={() => setLoaded(true)} aria-hidden="true" />

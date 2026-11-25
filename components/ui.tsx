@@ -112,11 +112,13 @@ export function Media({
       {item.src ? (
         <Image
           src={asset(item.src)!}
+          loading={priority ? undefined : 'lazy'}
           alt={item.alt[lang]}
           fill
           sizes={sizes}
           priority={priority}
           quality={82}
+          style={item.focus ? { objectPosition: item.focus } : undefined}
           onLoad={() => setLoaded(true)}
         />
       ) : (
