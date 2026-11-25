@@ -18,11 +18,11 @@ export type MediaItem = {
 
 export const media = {
   hero: {
-    // Tight crop on the tattoo only (no body), from /images/hero.webp
+    // Crop on the whole tattooed arm (no torso, no wall), from /images/hero.webp
     src: '/images/hero-tattoo.webp',
-    width: 578,
-    height: 812,
-    focus: '50% 32%',
+    width: 714,
+    height: 1550,
+    focus: '50% 40%',
     brief: 'HERO',
     alt: { mk: 'Христос со трнов венец — тетоважа од Black Owl Tattoo Studio', en: 'Christ with a crown of thorns — tattoo by Black Owl Tattoo Studio' },
   },
